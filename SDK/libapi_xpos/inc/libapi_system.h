@@ -159,14 +159,26 @@ LIB_EXPORT void Sys_Delay(uint uiMs);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
-Functions: Real time display of battery power
-Input : isDisp£º 0- does not display, 1- display
+Functions: Get battery power
+Input : void
 Output : Nothing
-return: Successful  0-100 (100 indicates maximum).
+return: Successful  0-5 (5 indicates maximum).
 		USYS_FAIL           = -1,    Fail
 Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT int Sys_GetBatter(void);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions: charging state
+Input : void
+Output : Nothing
+return: 0			Charging with charger.
+		-1          
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT int Sys_Batter_Charge(void);
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -193,21 +205,18 @@ Remarks:
 *************************************************************************************/
 LIB_EXPORT int Sys_Reboot(void);
 
-
-
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
-Author:yangjy
+Author:Leo
 Functions:Set screen backlight mode
 Input : mode Backlight mode
-			0- turn off backlight
-			1- system automatically controls
-			2- backlight is always bright
+			0- system automatically controls
+			1- backlight is always bright
 Output : Nothing
 return: USYS_FAIL           = -1,    Fail
 		USYS_SUCCESS        =  0	 	Success
-Remarks: Mode=1 indicates that the backlight is automatically 
-				controlled by the system, with a default of 1.
+Remarks: Mode=0 indicates that the backlight is automatically 
+				controlled by the system, with a default of 0.
 *************************************************************************************/
 LIB_EXPORT int Sys_SetScrBackLight(byte mode);
 
@@ -233,6 +242,8 @@ return: USYS_SUCCESS        =  0	 	Success
 Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT int Sys_scaner_open();
+
+
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:lxz
@@ -379,7 +390,7 @@ Remarks: Nothing
 LIB_EXPORT  void Sys_lcd_SetBackLightTime(int ntime);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
-Author:linzhu
+Author:Leo
 Functions:Get app version
 Input : 
 Output :
@@ -388,7 +399,19 @@ Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT const char * Sys_GetAppVer();
 
-
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:yangjy
+Functions: create system task
+Input : pfun:processing function of task
+		prio:task priority
+		stk:stack of task
+		task_size:stack size
+Output : Nothing
+return: 0 Successfully create
+		else FAIL    
+Remarks: Nothing
+*************************************************************************************/
 LIB_EXPORT int Sys_TaskCreate( void *pfun , int prio, char * stk, int task_size );
 
 #define SYS_DEVICE_TYPE_H9G		18
@@ -426,8 +449,95 @@ Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT void Sys_tms_update();
 
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:Disable check time from tms server
+Input : 
+Output :
+return: 
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT void Sys_tms_CheckTime_disable();
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:unpack /mf/app/data/mf.zip and upgrade, then reboot
+Input : 
+Output :
+return: 
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT void Sys_zip_update();
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:set device language;must set the right font priority
+Input :nLanguageType; 0,Chinese;1,English;2,Persian 
+Output :
+return: 
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT void Sys_set_language(int nLanguageType);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:Get current system timestamp
+Input :
+Output :
+return: Current system timestamp
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT int Sys_getTick();
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author: Leo
+Functions:Terminal power off
+Input : Nothing
+Output : Nothing
+return: Nothing
+Remarks: 
+*************************************************************************************/
+LIB_EXPORT void Sys_power_off();
+#define Sys_PowerOff Sys_power_off
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author: Leo
+Functions: Turn on track detection
+Input : Nothing
+Output : Nothing
+return: Nothing
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT void Sys_magtek_open();
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author: Leo
+Functions: Turn off track detection
+Input : Nothing
+Output : Nothing
+return: Nothing
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT void Sys_magtek_close();
+
 #define SYS_TRACE( ...)	osl_log( "app", 2 , __VA_ARGS__ )
 #define SYS_TRACE_BUFF(buff,size,tip) 	osl_log_buff_tip("app",2,buff, size , tip ,1 );
 
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:Screen Calibration
+Input : Nothing
+Output : Nothing 
+return: 
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT  void Sys_lcd_calibration();
 
 #endif /*__LIBAPI_SYSTEM_HEADER__*/

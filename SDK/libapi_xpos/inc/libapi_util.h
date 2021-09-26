@@ -69,6 +69,28 @@ LIB_EXPORT int Util_Bcd2Int(char *BcdBuf, uint *IntData, int BcdLen);
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:  Unicode data transfer to utf-8 code
+Input: codepoint: Unicode data to be converted 
+Output: outstr: utf-8 data after conversion
+return: the length of outstr
+Remarks:
+*************************************************************************************/
+LIB_EXPORT int Util_UnicodeToUtf8(unsigned short codepoint, char *outstr);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:  Unicode data transfer to utf-8 code
+Input: instr: utf-8 data to be converted 
+Output: outstr: Unicode data after conversion
+return: the length of outstr
+Remarks:
+*************************************************************************************/
+LIB_EXPORT int Util_Utf8ToUnicode(unsigned char *instr, unsigned char *outstr);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
 Functions: calculates LRC (Util_GenLrc) and generates LRC parity bits (bitwise exclusive or).
 Input: Data: data to be calculated for LRC check bits.
@@ -97,6 +119,30 @@ return: UUTIL_FAIL           = -1,       Fail
 Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT int Util_Des(byte bDesType, char *Key, char *InData, char *OutData);
+LIB_EXPORT int Util_DesEx(byte bType,byte bmode, char *Key,int keylen, char *InData, int datalen,char *OutData);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:leo
+Functions:  DES encryption and decryption (Util_Des) to DES data encryption and decryption, 
+		or 3DES encryption and decryption.
+Input: bDesType: DES encryption and decryption algorithm: 
+				0 denotes DES encryption, 
+				1 denotes DES decryption, 
+				2 denotes 3DES encryption(16 bytes key), 
+				3 denotes 3DES decryption(16 bytes key)
+				4 denotes 3DES encryption(24 bytes key), 
+				5 denotes 3DES decryption(24 bytes key).
+		bDesMode:0 ECB 1 CBC
+	    Key: used for encryption and decryption of transmission keys, must be 8 times.
+		InData: input data to be encrypted or decrypted must be 8 times bytes.
+		DataLen: the length of input data
+Output: OutData: the key after encryption and decryption must be 8 bytes.
+return: UUTIL_FAIL           = -1,       Fail
+		UUTIL_SUCCESS        =  0			Success
+Remarks: Nothing
+*************************************************************************************/
+LIB_EXPORT int Util_Des_Ex(byte bDesType, byte bDesMode, char *Key, char *InData, int DataLen, char *OutData);
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -169,7 +215,7 @@ LIB_EXPORT int Util_InputText(int disp_line, char * msgPrompt, int input_line, c
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
-Functions:2.2.5.13	string input (Util_InputText) number, child, password input
+Functions:2.2.5.13	string input (Util_InputTextEx) number, child, password input
 Input : disp_line:     the number of rows displayed
 		msgPrompt:     prompt information (left justified)
 		input_line£º   number of rows displayed in input data
@@ -228,17 +274,6 @@ LIB_EXPORT int Util_InputIp(int disp_line, char * msgPrompt, int input_line, cha
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
-Functions: Buzz failure (Util_ErrorBeep) indicates buzz and obstruction during failure.
-Input : num:  Buzz times
-Output : Nothing
-return: Nothing
-Remarks:Nothing
-*************************************************************************************/
-LIB_EXPORT void Util_ErrorBeep(int num);
-
-/*************************************************************************************
-Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
-Author:yangjy
 Functions: Buzzing success (Util_Beep) indicates buzzing when successful, non blocking.
 Input : num:    Buzz times
 Output : Nothing
@@ -246,6 +281,16 @@ return: Nothing
 Remarks:Nothing
 *************************************************************************************/
 LIB_EXPORT void Util_Beep(int num);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions: Buzzing for a while
+Input : nMillisecond:    Buzz time ms
+Output : Nothing
+return: Nothing
+Remarks:Nothing
+*************************************************************************************/
 LIB_EXPORT void Util_BuzzerSound(int nMillisecond);
 
 /*************************************************************************************
@@ -272,6 +317,28 @@ Remarks:   Voice playback is non blocking.
 *************************************************************************************/
 LIB_EXPORT void Play_Voice(char *msg);
 
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions: Set whether to turn on the key tone
+Input : nOpen: 1 open;0 close
+Output : Nothing
+return: Nothing
+Remarks:Nothing
+*************************************************************************************/
+LIB_EXPORT void Util_SwitchKeySound(int nOpen);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions: Get whether to turn on the key tone
+Input : nOpen: 1 open;0 close
+Output : Nothing
+return: Key sound value
+Remarks:Nothing
+*************************************************************************************/
+LIB_EXPORT int Util_GetKeySound();
+
 
 //QR code parameters
 typedef struct _QRParam
@@ -282,7 +349,7 @@ typedef struct _QRParam
 } Util_QR_INFO;
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
-Author:LinZhu
+Author:Leo
 Functions: QR code generation
 Input : chData QR code data, iLen data length, qrparam QR code parameters
 Output : bitmap Generated two-dimensional code dot matrix data
@@ -323,5 +390,15 @@ Output : Nothing
 return: 
 *************************************************************************************/
 LIB_EXPORT void Util_Free( void * p);
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:yangjy
+Functions: Calculate SHA1
+Input : psSrc:source buffer; nSrcLen:source length
+Output : psDst:result of SHA1
+return: 0 SUCC els fail
+Remarks:   
+*************************************************************************************/
+LIB_EXPORT int Util_SHA1(const byte *psSrc, uint nSrcLen, byte *psDst);
 
 #endif /*__LIBAPI_UTIL_HEADER__*/

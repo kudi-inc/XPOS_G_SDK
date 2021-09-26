@@ -57,16 +57,58 @@ LIB_EXPORT int mksk_save_plaintext_key(int type, int gid, unsigned char * key, u
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:leo
+Functions:Save key plaintext(Support single-length and double-length key storage )
+Input : 	type£º		Key type(0x00-0x04)
+			gid	£º		Key grouping(0-9)
+			key	:		Key plaintext
+			keyLen:		key length
+Output :	kvc			Key kvc(Key plaintext encryption 8 0x00)
+return: 0,     success
+		Other, failure	
+*************************************************************************************/
+LIB_EXPORT int mksk_save_plaintext_key_ex(int type, int gid, unsigned char * key, int keyLen, unsigned char *kvc);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:lx
 Functions:Save key ciphertext
 Input : 	type£º		Key type(0x00-0x04)
 			gid	£º		Key grouping(0-9)
 			key	:		Key plaintext
-Output :	kvc:		Key kvc(Key plaintext encryption 8 0x00)
+Output:		kvc:		Key kvc(Key plaintext encryption 8 0x00)
 return: 0,     success
 		Other, failure	
 *************************************************************************************/
 LIB_EXPORT int mksk_save_encrypted_key(int type, int gid, unsigned char * key, unsigned char *kvc);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:Leo
+Functions:Save key ciphertext
+Input : 	type£º		Key type(0x00-0x04)
+			gid	£º		Key grouping(0-9)
+			key	:		Key plaintext
+			des_mode:	0-ECB  1-CBC
+Output:		kvc:		Key kvc(Key plaintext encryption 8 0x00)
+return: 0,     success
+		Other, failure	
+*************************************************************************************/
+LIB_EXPORT int mksk_save_encrypted_key_ex(int type, int gid, unsigned char * key, int des_mode, unsigned char *kvc);
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author: Leo
+Functions:Save key ciphertext(Support single-length and double-length key storage)
+Input : 	type£º		Key type(0x00-0x04)
+			gid	£º		Key grouping(0-9)
+			key	:		Key Ciphertext
+			keyLen:		key length
+			des_mode:   0-ECB  1-CBC
+Output :	kvc:		Key kvc(Key plaintext encryption 8 0x00)
+return: 0,     success
+		Other, failure	
+*************************************************************************************/
+LIB_EXPORT int mksk_save_encrypted_key_ex2(int type, int gid, unsigned char * key, int keyLen, int des_mode, unsigned char *kvc);
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -99,6 +141,22 @@ return: 0,     success
 *************************************************************************************/
 LIB_EXPORT int mksk_3des_run_ex(int type, int gid, int mode, unsigned char *ind, int size, unsigned char *outd, int des_mode);
 
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:lx
+Functions:Use key 3des operation
+Input : 	type£º		Key type(0x00-0x04)
+			gid	£º		Key grouping(0-9)
+			mode:		Operation type (encryption/decryption)
+			ind:		Raw data
+			size:		Data length (8-byte multiple)
+			iv:			Initial vector(8 bytes 0x00)
+			des_mode:	Data padding(DES_MODE_ECB/DES_MODE_CBC)
+Output :   outd:		Calculation results
+return: 0,     success
+		Other, failure	
+*************************************************************************************/
+LIB_EXPORT int mksk_3des_run_ex2(int type, int gid, int mode, unsigned char *ind, int size, unsigned char iv[8],unsigned char *outd, int des_mode);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:lx
@@ -148,7 +206,7 @@ Input : 	type:		Initial key type
 						0 = ipek 1= bdk
 			mode:		Encryption method of initial key
 						0=Plaintext 1= tmk encryption 2= kek encryption
-			gid:		Key grouping£¬0
+			gid:		Key grouping,max 8 group, value 0-7
 			init_ksn:	Initial ksn	
 			init_key:	Initial key
 			kvc		:	Key kvc(Key plaintext encryption 8 0x00)

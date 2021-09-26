@@ -179,13 +179,13 @@ LIB_EXPORT int UFile_Clear(cchar *FileName, int iFileLocation);
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
 Functions:File system remaining space£¨UFile_GetFreeSpace£©
-Input : drive£º0
+Input : Nothing
 Output : Nothing
-return: Success£ºReturn to the remaining space unit K
+return: Success£ºReturn to the remaining space unit KB
 		UFILE_FAIL			= -1,              //Fail
 Remarks: 
 *************************************************************************************/
-LIB_EXPORT long UFile_GetFreeSpace(cchar *drive);
+LIB_EXPORT long UFile_GetFreeSpace();
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -307,7 +307,17 @@ Remarks: Power off protection,
 		In search of Success, Record is filled with search results
 *************************************************************************************/
 LIB_EXPORT int UFile_UpdateRecordByIndex(cchar *FileName, int iFileLocation, void *Record, int Record_Len, uint Index);
-
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions: Write data Block By file name£¨UFile_WriteBlockByName£©
+Input : file_name£ºFile Name 
+		write_start: the offset start to write
+		write_buff£ºthe buffer to write
+		write_size£ºthe size to write
+return: actual size wrote
+*************************************************************************************/
+LIB_EXPORT int UFile_WriteBlockByName(char * file_name,int write_start, char * write_buff,int write_size);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
@@ -428,18 +438,11 @@ LIB_EXPORT int UFile_DeleteTLV(char *FileName, int iFileLocation, uint FldID);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:yangjy
-Functions:2.2.9.26	Delete non fixed length record£¨UFile_DeleteTLV£©
+Functions:Get the length of the file
 Input : FileName£ºFile Name 
 		iFileLocation: Storage location£¬Reference enum FILELOCATION
-		FldID£º(Tag)
-Output : Nothing
-return: UFILE_NO_EXIST       = -12,             //The specified file does not exist.
-		UFILE_PARAERROR      = -11£¬            //Parameter Error
-		UFILE_NO_RECORD		= -10,             //Record not found
-		UFILE_DELETE_FAIL	= -7,              delete file record error
-		UFILE_OPEN_FAIL  	= -2,              //Open a mistake
-		UFILE_FAIL			= -1,              //Fail
-		UFILE_SUCCESS        =  0              //Successful file operation
+Output: Nothing
+return: the length of the file
 Remarks: Nothing
 *************************************************************************************/
 LIB_EXPORT int UFile_GetLength(cchar *FileName, int iFileLocation);

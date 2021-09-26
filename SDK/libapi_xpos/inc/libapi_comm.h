@@ -7,7 +7,7 @@ extern "C"{
 #endif
 
 typedef struct __st_wifi_ap_list{
-	int ecn;
+	int ecn;//Encryption method 0: OPEN 1: WEP 2: WPA_PSK 3: WPA2_PSK 4: WPA_WPA2_PSK
 	char ssid[64];//WiFi name
 	char utf8ssid[64];
 	int rssi;//Signal strength
@@ -67,8 +67,8 @@ Author:lx
 Functions:create socket
 Input : index(0/1)
 Output : Nothing
-return: 0,     success
-		Other, failure	
+return: >=0 index created
+		<0, failure	
 *************************************************************************************/
 LIB_EXPORT int comm_sock_create(int index);
 
@@ -84,7 +84,20 @@ return: 0,     success
 		Other, failure		
 *************************************************************************************/
 LIB_EXPORT int comm_sock_connect(int index, char * ip, int port);
-LIB_EXPORT int comm_sock_connect2(int index , char * ip , int port,void *func);
+
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:lx
+Functions:connect to the server
+Input : index:	sock index
+		ip:		server ip
+		port:	server port
+		func:	callback fuction	
+Output : Nothing			
+return: 0,     success
+		Other, failure		
+*************************************************************************************/
+LIB_EXPORT int comm_sock_connect2(int index, char * ip, int port, void *func);
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -108,8 +121,8 @@ Input : index		sock index
 		  buff		Send buffer
 		  len		Send length
 Output : Nothing			
-return: 0,     success
-		Other, failure		
+return: >0,	 Sended length
+		<=0, failure		
 *************************************************************************************/
 LIB_EXPORT int comm_sock_send(int index, unsigned char * buff , int size);
 
@@ -174,8 +187,8 @@ Input : index		sock index
 	      data		ssl data
 		  size		Data size
 Output : Nothing			
-return: 0,     success
-		Other, failure		
+return: >0,	 Sended length
+		<=0, failure		
 *************************************************************************************/
 LIB_EXPORT int comm_ssl_send(int index, char * pdata, int size);
 
@@ -193,6 +206,7 @@ return: - 0 if the read end of the underlying transport was closed,
 *************************************************************************************/
 LIB_EXPORT int comm_ssl_recv(int index, char * pdata, int size);
 
+LIB_EXPORT int comm_ssl_recv3(int index);
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
 Author:lx
@@ -324,6 +338,15 @@ Output :
 return: wifi signal
 *************************************************************************************/
 LIB_EXPORT char * wifi_get_local_ip();
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:lx
+Functions:get wifi rssi
+Input : 
+Output : 
+return: wifi rssi
+*************************************************************************************/
+LIB_EXPORT int comm_wifi_get_rssi();
 
 /*************************************************************************************
 Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
@@ -396,7 +419,50 @@ return: iccid
 *************************************************************************************/
 LIB_EXPORT const char * comm_atc_iccid();
 
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:get net model GPRS or Wifi 
+Input :void 
+Output : void
+return:	WIRELESS = 0,		
+		WIFI=1,							
+*************************************************************************************/
+LIB_EXPORT int comm_net_model();
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:get net link state for both GPRS and Wifi 
+Input :void 
+Output : void
+return:	linked 1,		
+		disconnect 0,							
+*************************************************************************************/
+LIB_EXPORT int comm_link_state();
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:select wifi or gprs
+Input :nselect 
+		0 Only GPRS,		
+		1 Only WIFI,							
+		2 Priority GPRS,
+		3 Priority WIFI
+Output : void
+return:	failed <0,		
+		success 0,							
+*************************************************************************************/
+LIB_EXPORT int comm_set_netselect(int nselect);
+/*************************************************************************************
+Copyright: Fujian MoreFun Electronic Technology Co., Ltd.
+Author:George
+Functions:get mode of wifi or gprs or the Priority
+Input :void 
+Output : void
+return:	
 
+*************************************************************************************/
+LIB_EXPORT int comm_get_netselect(void);
 
 #ifdef __cplusplus
 }
